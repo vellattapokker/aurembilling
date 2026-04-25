@@ -211,16 +211,20 @@ input:focus {
 
 .background-monogram {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 65%; /* Safely anchors near the bottom using top to prevent html2canvas bugs */
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
     font-family: 'Playfair Display', serif;
-    font-size: 30rem;
+    font-size: 29rem;
     color: var(--accent); /* Changed from accent-light for better contrast */
     opacity: 0.1; /* Subtle but visible */
     z-index: 0;
     pointer-events: none;
     letter-spacing: -20px;
+    line-height: 0.75; /* Keeps the text bounding box tight to avoid pushing limits */
+    margin: 0 0 0 -10px; /* Fine-tuning to avoid touching the left margin */
 }
 
 .cover-header {
@@ -231,7 +235,7 @@ input:focus {
     align-items: center;
     gap: 15px;
     margin-bottom: 40px; 
-    margin-top: 40mm; /* Restored to original spacious margin */
+    margin-top: 20mm; /* Reduced to bring main logo up slightly */
 }
 
 .cover-logo {
