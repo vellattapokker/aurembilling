@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurem Weddings | Billing & Quotation</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .cover-logo {
+            max-width: 400px;
+            height: auto;
+        }
+
+        .quick-add-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: var(--accent-light);
+            border-radius: 12px;
+            border: 1px solid var(--accent);
+        }
+
+        .quick-add-btn {
+            background: white;
+            border: 1px solid var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .quick-add-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .toggle-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="dashboard">
+        <div class="header">
+            <h1>AUREM WEDDINGS</h1>
+            <p>Billing & Client Management</p>
+        </div>
+
+        <div class="form-grid">
+            <div class="input-group">
+                <label for="clientName">Client Name (Greeting)</label>
+                <input type="text" id="clientName" placeholder="e.g. Anjali" oninput="updatePreview()">
+            </div>
+            <div class="input-group">
+                <label for="packageName">Package Title</label>
+                <input type="text" id="packageName" placeholder="e.g. Wedding Day Coverage (Single Side)"
+                    oninput="updatePreview()">
+            </div>
+            <div class="input-group">
+                <label for="weddingDate">Quotation Date</label>
+                <input type="date" id="weddingDate" oninput="updatePreview()">
+            </div>
+            <div class="input-group">
+                <label for="caption">Cover Caption</label>
+                <input type="text" id="caption" placeholder="directed by emotion" oninput="updatePreview()">
+            </div>
+        </div>
+
+        <div class="form-grid">
+            <div class="input-group">
+                <label for="description">Welcome Message</label>
+                <textarea id="description" rows="5" placeholder="Enter welcome message..."
+                    oninput="updatePreview()"></textarea>
+            </div>
+            <div class="input-group">
+                <label for="scopeOfWork">Our Scope of Work</label>
+                <textarea id="scopeOfWork" rows="5" placeholder="Enter scope of work details..."
+                    oninput="updatePreview()"></textarea>
+            </div>
+        </div>
+
+        <div class="form-grid">
+            <div class="input-group">
+                <label>Deliverables (Click to select)</label>
+                <div class="quick-add-bar" id="deliverables-bar">
+                    <button class="quick-add-btn toggle-btn active"
+                        data-value="Premium Wedding Album : 50 sheets (Bride side & Groom side)"
+                        onclick="toggleSelection(this)">Wedding Album</button>
+                    <button class="quick-add-btn toggle-btn active"
+                        data-value="Cinematic Highlight Video or Full-Length Wedding Video (Both Side)"
+                        onclick="toggleSelection(this)">Highlight Video</button>
+                    <button class="quick-add-btn toggle-btn active" data-value="Photo Frames"
+                        onclick="toggleSelection(this)">Photo Frames</button>
+                    <button class="quick-add-btn toggle-btn active" data-value="Customized Calendar"
+                        onclick="toggleSelection(this)">Calendar</button>
+                    <button class="quick-add-btn toggle-btn active" data-value="USB Drive with Wooden Box"
+                        onclick="toggleSelection(this)">USB Drive</button>
+                    <button class="quick-add-btn toggle-btn active" data-value="Album Bag"
+                        onclick="toggleSelection(this)">Album Bag</button>
+                    <button class="quick-add-btn toggle-btn active" data-value="Digital Soft Copy Album (Both Side)"
+                        onclick="toggleSelection(this)">Soft Copy Album</button>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                    <input type="text" id="customDeliverable" placeholder="Add custom deliverable..."
+                        style="flex: 1; padding: 8px 12px; font-size: 0.85rem;">
+                    <button class="btn btn-outline" onclick="addCustomDeliverable()" style="padding: 8px 16px;">+
+                        Add</button>
+                </div>
+                <textarea id="deliverables" rows="2" style="display: none;" oninput="updatePreview()"></textarea>
+            </div>
+            <div class="input-group">
+                <label>Add-on Services (Click to select)</label>
+                <div class="quick-add-bar" id="addons-bar">
+                    <button class="quick-add-btn toggle-btn" data-value="Live Streaming (YouTube & Facebook): ₹10,000"
+                        onclick="toggleSelection(this)">Live Streaming</button>
+                    <button class="quick-add-btn toggle-btn" data-value="Helicam (Drone) Coverage: ₹10,000"
+                        onclick="toggleSelection(this)">Drone</button>
+                    <button class="quick-add-btn toggle-btn" data-value="Extra Album Sheet: ₹500 per leaf"
+                        onclick="toggleSelection(this)">Extra Sheets</button>
+                    <button class="quick-add-btn toggle-btn"
+                        data-value="Live Photo Printing (up to 400 prints): ₹10,000"
+                        onclick="toggleSelection(this)">Live Printing</button>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                    <input type="text" id="customAddon" placeholder="Add custom add-on..."
+                        style="flex: 1; padding: 8px 12px; font-size: 0.85rem;">
+                    <button class="btn btn-outline" onclick="addCustomAddon()" style="padding: 8px 16px;">+ Add</button>
+                </div>
+                <textarea id="addons" rows="2" style="display: none;" oninput="updatePreview()"></textarea>
+            </div>
+        </div>
+
+        <div class="items-section">
+            <label>Bill Items</label>
+            <div class="quick-add-bar">
+                <span style="font-size: 0.7rem; width: 100%; margin-bottom: 5px; opacity: 0.7;">QUICK ADD
+                    SERVICES:</span>
+                <button class="quick-add-btn"
+                    onclick="quickAddItem('Wedding Day Package (Both Side)', '2 Professional Photographers (Bride & Groom side)\n2 Professional Videographers (Bride & Groom side)')">Wedding
+                    (Both)</button>
+                <button class="quick-add-btn"
+                    onclick="quickAddItem('Haldi Ceremony (Bride side)', '1 Photographer\n1 Videographer')">Haldi</button>
+                <button class="quick-add-btn"
+                    onclick="quickAddItem('Wedding Eve (Groom side)', '1 Photographer\n1 Videographer')">Wedding
+                    Eve</button>
+                <button class="quick-add-btn" onclick="quickAddItem('Save the Date Shoot', '1 Photographer')">Save the
+                    Date</button>
+                <button class="quick-add-btn"
+                    onclick="quickAddItem('Wedding Reception', '1 Photographer\n1 Videographer')">Reception</button>
+            </div>
+            <table class="items-table" id="itemsInputTable">
+                <thead>
+                    <tr>
+                        <th>Service / Item</th>
+                        <th style="width: 250px;">Details</th>
+                        <th style="width: 50px;"></th>
+                    </tr>
+                </thead>
+                <tbody id="itemsBody">
+                    <tr>
+                        <td><input type="text" class="item-desc" placeholder="e.g. Wedding Day"
+                                oninput="updatePreview()"></td>
+                        <td><textarea class="item-details" placeholder="e.g. 1 Photographer, 1 Videographer"
+                                oninput="updatePreview()" rows="2"
+                                style="width: 100%; min-height: 40px; resize: vertical;"></textarea></td>
+                        <td><button class="btn btn-outline" onclick="removeItem(this)">×</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="input-group" style="margin-top: 15px; width: 200px;">
+                <label for="totalCost">Total Package Cost</label>
+                <input type="text" id="totalCost" placeholder="0" oninput="updatePreview()">
+            </div>
+            <button class="btn btn-outline" style="margin-top: 15px;" onclick="addItem()">+ Add Line</button>
+        </div>
+
+        <div
+            style="margin-top: 50px; text-align: center; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="window.print()">Generate & Print PDF</button>
+            <button class="btn btn-accent" style="background-color: #25D366; color: white; border: none;"
+                onclick="sendWhatsApp()">
+                <svg viewBox="0 0 24 24" width="18" height="18"
+                    style="vertical-align: text-bottom; margin-right: 5px; fill: currentColor;">
+                    <path
+                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
+                </svg>
+                Send via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <div id="preview-container">
+        <!-- Page 1: Cover -->
+        <div class="page page-cover">
+            <div class="background-monogram">AW</div>
+            <div class="cover-header">
+                <img src="logo_black.png" alt="Aurem Weddings" class="cover-logo">
+                <div class="cover-sub-title" id="preview-caption">directed by emotion</div>
+            </div>
+
+            <div class="decorative-circles">
+                <div class="circle" style="background-color: #ff9800;"></div>
+                <div class="circle" style="background-color: #e91e63;"></div>
+                <div class="circle" style="background-color: #2196f3;"></div>
+                <div class="circle" style="background-color: #4caf50;"></div>
+            </div>
+
+            <div class="cover-footer">
+                <div>
+                    <p>Client: <span id="preview-client-footer" style="font-weight: 700;">Anjali</span></p>
+                    <p>Event Date: <span id="preview-date-footer" style="font-weight: 700;">dd-mm-yyyy</span></p>
+                </div>
+                <div>
+                    <p>Prepared By: <span style="font-weight: 700;">Aurem Weddings</span></p>
+                </div>
+            </div>
+            <div class="page-number">01</div>
+        </div>
+
+        <!-- Page 2: Welcome & Scope -->
+        <div class="page page-description">
+            <div class="corner-accent top-right"></div>
+            <h2 class="serif">Welcome Letter</h2>
+            <div class="description-content" id="preview-description" style="text-align: justify; margin-bottom: 30px;">
+                <!-- Welcome text -->
+            </div>
+
+            <h2 class="serif" style="font-size: 1.4rem; margin-bottom: 15px;">Our Scope of Work</h2>
+            <div class="description-content" id="preview-scope"
+                style="text-align: justify; font-size: 1.1rem; color: #000;">
+                <!-- Scope text -->
+            </div>
+
+            <div class="page-number">02</div>
+        </div>
+
+        <!-- Page 3: Bill -->
+        <div class="page page-bill">
+            <div class="corner-accent top-left"></div>
+            <div
+                style="text-align: center; margin-bottom: 10px; margin-top: -8mm; display: flex; flex-direction: column; align-items: center;">
+                <img src="logo_black.png" alt="Aurem Weddings"
+                    style="width: 140px; height: auto; mix-blend-mode: multiply;">
+                <p
+                    style="font-weight: 600; color: #000; margin-top: 5px; font-size: 0.7rem; border-bottom: 1px solid #000; padding-bottom: 2px; text-transform: uppercase; letter-spacing: 1px;">
+                    Wedding Photography Quotation</p>
+            </div>
+
+            <div style="margin-bottom: 8px; font-size: 0.75rem; color: #333;">
+                <p>Dear <span id="preview-client-name" style="font-weight: 600;">Anjali</span>,</p>
+                <p>Thank you for considering AUREM Weddings. Please find the quotation details below:</p>
+            </div>
+
+            <div class="bill-section-title">Package: <span id="preview-package-name">Wedding Day Coverage (Single
+                    Side)</span></div>
+            <table class="bill-table">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody id="preview-items-body">
+                    <!-- Items will be injected here -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="total-label">Total Cost</td>
+                        <td class="total-row">₹ <span id="preview-total">0</span></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="list-section" id="container-deliverables">
+                <div class="bill-section-title">Deliverables</div>
+                <ul id="preview-deliverables">
+                    <!-- Deliverables will be injected here -->
+                </ul>
+            </div>
+
+            <div class="list-section" id="container-addons">
+                <div class="bill-section-title">Add-on Services</div>
+                <ul id="preview-addons" style="list-style: none; padding-left: 0;">
+                    <!-- Addons will be injected here -->
+                </ul>
+            </div>
+
+            <div class="list-section">
+                <div class="bill-section-title">Important Notes</div>
+                <ul style="font-size: 0.85rem; color: #333; list-style-type: none; padding-left: 0;">
+                    <li style="border: none; padding: 2px 0; padding-left: 15px;"> This quotation is valid for a limited
+                        period and subject to date availability.</li>
+                    <li style="border: none; padding: 2px 0; padding-left: 15px;"> Travel and accommodation expenses (if
+                        applicable) will be charged extra.</li>
+                </ul>
+            </div>
+
+            <div style="margin-top: 20px; font-size: 0.85rem; line-height: 1.6;">
+                <p>Looking forward to capturing your beautiful memories.</p>
+                <br>
+                <p>Warm regards,</p>
+                <p style="font-weight: 700;">AUREM WEDDINGS</p>
+            </div>
+            <div class="page-number">03</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
